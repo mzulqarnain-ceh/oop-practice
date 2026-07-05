@@ -40,10 +40,12 @@ class Car(Vehicle):
         print(f"{self.name} is a Car | Speed: {self.speed} | Fuel: Petrol")
 class Bike(Vehicle):
     def describe(self):
-        print("Bike can carry 1 or 2 person")
+        print(f"{self.name} is a Bike | Speed: {self.speed}")
+        # print("Bike can carry 1 or 2 person")
 class Truck(Vehicle):
     def describe(self):
-        print("Truck is used for heavy loads")
+        print(f"{self.name} is a Truck | Speed: {self.speed}")
+        # print("Truck is used for heavy loads")
 v=[Vehicle("Vehicle",80),Car("toyota",120),Bike("CG150",100),Truck("Volks",60)]
 for t in v:
     t.describe()
