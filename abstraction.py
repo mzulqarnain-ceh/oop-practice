@@ -27,7 +27,7 @@
 #     t=Triangle()
 # except Exception as e:
 #     print(e)
-# # s=Shape() # This gives error because abstract class ha no object
+# # s=Shape() # This gives error because abstract class has no object
 # c=Circle(5)
 # c.area()
 # c.perimeter()

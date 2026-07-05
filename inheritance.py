@@ -15,12 +15,14 @@
 #         self.name=name
 # class Dog(Animal):
 #     def __init__(self,name,breed):
-#         super().__init__(name)
+#         super().__init__(name) # super() ko use kr k hum parent class k constructor ko call kr sakty hain
 #         self.breed=breed
 #     def show(self):
 #         print(f"Name: {self.name} | Breed: {self.breed}")
 # d=Dog("Tommy", "German Shepherd")
 # d.show()
+
+# test
 class Person:
     def __init__(self,name,age):
         self.name=name
