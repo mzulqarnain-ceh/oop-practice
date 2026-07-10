@@ -23,7 +23,6 @@ class Member(Person):
             self.__borrowed_books.append(book)
     def return_book(self,book):
         self.__borrowed_books.remove(book)
-        print(f"{book.title} wapas ho gyi ha ")
     def show_books(self):
         print(f"Borrowed Books: {[book.title for book in self.__borrowed_books]}")
     def __str__(self):
