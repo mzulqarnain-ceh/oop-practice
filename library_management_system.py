@@ -15,16 +15,17 @@ class Member(Person):
         return self.__borrowed_books
     @borrowed_books.setter
     def borrowed_books(self,value):
-        if value > 3:
-            print("Limit exceeds")
-        else:
             self.__borrowed_books=value
     def borrow_book(self,book):
-        self.__borrowed_books.append({"Book":book})
+        if len(self.__borrowed_books)>=3:
+            print(f"{self.name} ki limit exceed ho gyi ha ")
+        else:
+            self.__borrowed_books.append(book)
     def return_book(self,book):
-        self.__borrowed_books.remove({"Book":book})
+        self.__borrowed_books.remove(book)
+        print(f"{book.title} wapas ho gyi ha ")
     def show_books(self):
-        print(f"Borrowed Books: {[b['Book'].title for b in self.__borrowed_books]}")
+        print(f"Borrowed Books: {[book.title for book in self.__borrowed_books]}")
     def __str__(self):
         return f"Name: {self.name} | Age: {self.age} | Member_ID: {self.member_id} | Borrowed Books{self.__borrowed_books}"
 class Book:
