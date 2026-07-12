@@ -18,14 +18,15 @@ class Patient(Person):
     @medical_history.setter
     def medical_history(self,value):
         if isinstance(value,str):
-            print(f"{value} ik string ha")
-            return
+            self.__medical_history=value
+        else:
+            return f"Value String nai ha"
     def add_history(self,record):
         self.__medical_history.append(record)
     def show_history(self):
         print(f"Medical history: {self.__medical_history}")
     def __str__(self):
-        return f"Name: {self.name} | Age: {self.age} | Phone: {self.phone} Patient_id: {self.patient_id} Disease: {self.disease} Medical History: {self.__medical_history}"
+        return f"Name: {self.name} | Patient_id: {self.patient_id} | Disease: {self.disease}"
 class Doctor(Person):
     def __init__(self,name,age,phone,doctor_id,specialization,patients=None):
         super().__init__(name,age,phone)
@@ -36,18 +37,16 @@ class Doctor(Person):
         self.__patients.append(patient)
     def remove_patient(self,patient_id):
         for patient in self.__patients:
-            if patient==patient_id:
+            if patient.patient_id==patient_id:
                 self.__patients.remove(patient)
-                print(f"{patient} remove ho gya ha")
                 return
-        print("Patient not found")
     def show_patients(self):
         print(f"Assigned patients are: {self.__patients}")
     @staticmethod
     def doctor_info():
         print("Doctors available 24/7")
     def __str__(self):
-        return f"Name: {self.name} | Age: {self.age} | Phone: {self.phone} | Doctor_id: {self.doctor_id} | Specialization: {self.specialization} | Patients_list: {self.__patients}"
+        return f"Name: {self.name} | Doctor_id: {self.doctor_id} | Specialization: {self.specialization}"
 class AbstractHospital(ABC):
     @abstractmethod
     def admit_patient(self):
@@ -64,13 +63,25 @@ class Hospital(AbstractHospital):
         self.__patients=patients or []
         self.__doctors=doctors or []
     def admit_patient(self,patient,doctor):
-        pass
+        self.__patients.append(patient)
+        doctor.assign_patient(patient)
     def discharge_patient(self,patient_id):
-        pass
+        for patient in self.__patients:
+            if patient.patient_id==patient_id:
+                self.__patients.remove(patient)
+                print(f"{patient.name} discharge ho gya ")
+                for doctor in self.__doctors:
+                    doctor.remove_patient(patient_id)
+                return
+        print("Patient not found")
     def search_patient(self,patient_id):
-        pass
+        for patient in self.__patients:
+            if patient.patient_id==patient_id:
+                print(f"Patient mila - Name: {patient.name} | Disease: {patient.disease}")
+                return
+        print("Patient not founf")
     def add_doctor(self,doctor):
-        pass
+        self.__doctors.append(doctor)
     @classmethod
     def create_hospital(cls,name):
         return cls(name)
@@ -80,10 +91,9 @@ class Hospital(AbstractHospital):
     def __len__(self):
         return len(self.__patients)
     def __str__(self):
-        pass
-        # patient_list=", ".join([for patient in self.__patients])
-        # doctor_list=", ".join([for doctor in self.__pdoctors])
-        # return f"Hospital: {self.hospital_name} | Patients: {patient_list} | Doctors: {doctor_list}"
+        patient_list=", ".join([patient.name for patient in self.__patients])
+        doctor_list=", ".join([doctor.name for doctor in self.__doctors])
+        return f"Hospital: {self.hospital_name} | Patients: {patient_list} | Doctors: {doctor_list}"
 # Hospital banao
 h = Hospital.create_hospital("City Hospital")
 Hospital.hospital_info()
