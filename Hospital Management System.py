@@ -79,7 +79,7 @@ class Hospital(AbstractHospital):
             if patient.patient_id==patient_id:
                 print(f"Patient mila - Name: {patient.name} | Disease: {patient.disease}")
                 return
-        print("Patient not founf")
+        print("Patient not found")
     def add_doctor(self,doctor):
         self.__doctors.append(doctor)
     @classmethod
