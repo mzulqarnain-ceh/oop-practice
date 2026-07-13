@@ -54,7 +54,7 @@ class Doctor(Person):
         return f"Name: {self.name} | Doctor_id: {self.doctor_id} | Specialization: {self.specialization}"
 class AbstractHospital(ABC):
     @abstractmethod
-    def add_patient(self):
+    def admit_patient(self):
         pass
     @abstractmethod
     def discharge_patient(self):
@@ -63,7 +63,41 @@ class AbstractHospital(ABC):
     def search_patient(self):
         pass
 class Hospital(AbstractHospital):
-    pass
+    def __init__(self,hospital_name,patients=None,doctors=None):
+        self.hospital_name=hospital_name
+        self.__patients=patients or []
+        self.__doctors=doctors or []
+    def admit_patient(self,patient,doctor):
+        self.__patients.append(patient)
+        doctor.assign_patient(patient)
+    def discharge_patient(self,patient_id):
+        for patient in self.__patients:
+            if patient.patient_id==patient_id:
+                self.__patients.remove(patient)
+                print(f"{patient.name} ko discharge kr diya ha")
+                for doctor in self.__doctors:
+                    doctor.remove_patient(patient)
+                return
+    def search_patient(self,patient_id):
+        for patient in self.__patients:
+            if patient.patient_id==patient_id:
+                print(f"Patient: {patient.name} mil gya ha ")
+            else:
+                print("Patient nai mila")
+    def add_doctor(self,doctor):
+        self.__doctors.append(doctor)
+    @classmethod
+    def create_hospital(cls,name):
+        return cls(name)
+    @staticmethod
+    def hospital_info():
+        print("Emergency 1122")
+    def __len__(self):
+        return len(self.__patients)
+    def __str__(self):
+        patient_list=", ".join([patient.name for patient in self.__patients])
+        doctor_list=", ".join([doctor.name for doctor in self.__doctors])
+        return f"Hospital Name: {self.hospital_name} | Patients: {patient_list} | Doctors: {doctor_list}"
 # p=Person("Ali",19,"0300-300")
 # p.get_info()
 pa=Patient("Ali",50,"0300-123","001","Heart disease")
@@ -78,3 +112,11 @@ d.show_patients()
 d.doctor_info()
 d.remove_patient("001")
 # d.show_patients()
+h=Hospital.create_hospital("City-Hospital")
+h.hospital_info()
+h.admit_patient(pa,d)
+# h.discharge_patient("001")
+h.search_patient("001")
+h.add_doctor(d)
+print(len(h))
+print(h)
