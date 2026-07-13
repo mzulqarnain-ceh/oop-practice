@@ -43,8 +43,7 @@ class Doctor(Person):
         for patient in self.__patients:
             if patient.patient_id==patient_id:
                 self.__patients.remove(patient)
-                print(f"{patient.name} remove ho gya ha")
-        return
+                return
     def show_patients(self):
         print(f"Assigned Patients are: {[patient.name for patient in self.__patients]}")
     @staticmethod
@@ -78,12 +77,13 @@ class Hospital(AbstractHospital):
                 for doctor in self.__doctors:
                     doctor.remove_patient(patient)
                 return
+        print("Patient not found")
     def search_patient(self,patient_id):
         for patient in self.__patients:
             if patient.patient_id==patient_id:
-                print(f"Patient: {patient.name} mil gya ha ")
-            else:
-                print("Patient nai mila")
+                print(f"Patient: {patient.name} | Disease: {patient.disease} | Patient mil gya ha ")
+                return
+        print("Patient nai mila")
     def add_doctor(self,doctor):
         self.__doctors.append(doctor)
     @classmethod
@@ -98,25 +98,57 @@ class Hospital(AbstractHospital):
         patient_list=", ".join([patient.name for patient in self.__patients])
         doctor_list=", ".join([doctor.name for doctor in self.__doctors])
         return f"Hospital Name: {self.hospital_name} | Patients: {patient_list} | Doctors: {doctor_list}"
+# Hospital banao
+h = Hospital.create_hospital("City Hospital")
+Hospital.hospital_info()
+
+# Doctors banao
+d1 = Doctor("Dr. Ali", 45, "0300-1234", "D001", "Cardiologist")
+d2 = Doctor("Dr. Sara", 38, "0301-5678", "D002", "Neurologist")
+h.add_doctor(d1)
+h.add_doctor(d2)
+
+# Patients banao
+p1 = Patient("Ahmed", 30, "0333-111", "P001", "Heart Issue")
+p2 = Patient("Zara", 25, "0334-222", "P002", "Migraine")
+
+# Admit karo
+h.admit_patient(p1, d1)
+h.admit_patient(p2, d2)
+
+# History add karo
+p1.add_history("ECG done - Normal")
+p1.add_history("Medicine prescribed")
+p1.show_history()
+
+# Search karo
+h.search_patient("P001")
+
+# Discharge karo
+h.discharge_patient("P001")
+
+print(h)
+print(len(h))
+
 # p=Person("Ali",19,"0300-300")
 # p.get_info()
-pa=Patient("Ali",50,"0300-123","001","Heart disease")
-print(pa)
-pa.medical_history="ECG normal"
-pa.add_history("CT scan Normal")
-pa.show_history()
-d=Doctor("Dr. Ali",30,"0330-4321","001","Heart surgon")
-print(d)
-d.assign_patient(pa)
-d.show_patients()
-d.doctor_info()
-d.remove_patient("001")
+# pa=Patient("Ali",50,"0300-123","001","Heart disease")
+# print(pa)
+# pa.medical_history="ECG normal"
+# pa.add_history("CT scan Normal")
+# pa.show_history()
+# d=Doctor("Dr. Ali",30,"0330-4321","001","Heart surgon")
+# print(d)
+# d.assign_patient(pa)
 # d.show_patients()
-h=Hospital.create_hospital("City-Hospital")
-h.hospital_info()
-h.admit_patient(pa,d)
-# h.discharge_patient("001")
-h.search_patient("001")
-h.add_doctor(d)
-print(len(h))
-print(h)
+# d.doctor_info()
+# d.remove_patient("001")
+# # d.show_patients()
+# h=Hospital.create_hospital("City-Hospital")
+# h.hospital_info()
+# h.admit_patient(pa,d)
+# # h.discharge_patient("001")
+# h.search_patient("001")
+# h.add_doctor(d)
+# print(len(h))
+# print(h)
