@@ -1,0 +1,32 @@
+[
+  {
+    "Roll": 1,
+    "Name": "Ali",
+    "Class": 10,
+    "Marks": 891
+  },
+  {
+    "Roll": 2,
+    "Name": "Noman",
+    "Class": 10,
+    "Marks": 902
+  },
+  {
+    "Roll": 3,
+    "Name": "Haider",
+    "Class": 10,
+    "Marks": 932
+  },
+  {
+    "Roll": 4,
+    "Name": "Ahad",
+    "Class": 10,
+    "Marks": 1021
+  },
+  {
+    "Roll": 5,
+    "Name": "Abdur Rehman",
+    "Class": 10,
+    "Marks": 999
+  }
+]
