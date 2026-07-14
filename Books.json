@@ -1,0 +1,20 @@
+[
+  {
+    "Book_id": 1,
+    "Title": "Python Basics",
+    "Author": "Ali",
+    "Quantity": 20
+  },
+  {
+    "Book_id": 2,
+    "Title": "OOP",
+    "Author": "Hasan",
+    "Quantity": 25
+  },
+  {
+    "Book_id": 3,
+    "Title": "Programming",
+    "Author": "Hasan Ali",
+    "Quantity": 23
+  }
+]
