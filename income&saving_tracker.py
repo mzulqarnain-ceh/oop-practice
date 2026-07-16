@@ -25,8 +25,8 @@ def add_transaction():
     except ValueError:
         print("Please enter a valid amount")
         return
-    type=input("Enter type: income or expense: ").strip().upper()
-    if type not in ("INCOME","EXPENSE"):
+    tx_type=input("Enter type: income or expense: ").strip().upper()
+    if tx_type not in ("INCOME","EXPENSE"):
         print("Type must be income or expense")
         return
     category=input("Enter category: ")
@@ -34,7 +34,7 @@ def add_transaction():
         print("Category must not be empty")
         return
     today=str(date.today())
-    cursor.execute("INSERT INTO expense(amount,type,category,date) VALUES(?,?,?,?)",(amount,type,category,today))
+    cursor.execute("INSERT INTO expense(amount,type,category,date) VALUES(?,?,?,?)",(amount,tx_type,category,today))
     conn.commit()
     print("Transaction added successfully!")
 def view_all_transactions():
