@@ -2,6 +2,7 @@ import os
 import csv
 import requests
 from bs4 import BeautifulSoup
+# import time
 folder=os.path.dirname(__file__)
 path=os.path.join(folder,"books_scraping.csv")
 def fetch_html(url):
@@ -47,12 +48,18 @@ def save_to_csv(books):
     print(f"Data Successfully saved to {path}")
 # entry Point
 if __name__=="__main__":
-    url="http://books.toscrape.com/"
-    print(f"Scraping data from: {url}...")
-    html=fetch_html(url)
-    if html:
-        books=parse_books(html)
-        display_books(books)
-        save_to_csv(books)
-    else:
-        print("Failed to fetch page.")
+    base_url="http://books.toscrape.com/catalogue/page-{}.html"
+    all_books=[]
+    for page in range(1,51):
+        url=base_url.format(page)
+        print(f"Scraping data from {url}.......")
+        html=fetch_html(url)
+        if html:
+            books=parse_books(html)
+            all_books.extend(books)
+            # time.sleep(1)
+        else:
+            print("No more pages found. Stopping.")
+            break
+        display_books(all_books)
+        save_to_csv(all_books)
