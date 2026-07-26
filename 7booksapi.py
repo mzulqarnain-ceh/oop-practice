@@ -38,6 +38,31 @@ def get_book(id):
     if book is None:
         return jsonify({"error":"Book Not Found"}),404
     return jsonify({"id":book["id"], "title":book["title"],"author":book["author"]})
+@app.route("/books", methods=["POST"])
+def add_book():
+    data = request.get_json()
+    if not data or "title" not in data or "author" not in data:
+        return jsonify({"error": "title and author are required"}), 400
+    conn = get_db()
+    conn.execute("INSERT INTO books (title, author) VALUES (?, ?)", (data["title"], data["author"]))
+    conn.commit()
+    conn.close()
+    return jsonify({"message": "Book added successfully"}), 201
+@app.route("/books/<int:id>", methods=["PUT"])
+def update_book(id):
+    data = request.get_json()
+    if not data or "title" not in data or "author" not in data:
+        return jsonify({"error": "title and author are required"}), 400
+    conn = get_db()
+    book = conn.execute("SELECT * FROM books WHERE id=?",(id,)).fetchone()
+    if book is None:
+        conn.close()
+        return jsonify({"error": "Book not found"}), 404
+    conn.execute("UPDATE books SET title=?, author=? WHERE id=?",(data["title"], data["author"], id))
+    conn.commit()
+    conn.close()
+    return jsonify({"message": "Book updated successfully"})
+
 if __name__=="__main__":
     create_table()
     app.run(debug=True)
