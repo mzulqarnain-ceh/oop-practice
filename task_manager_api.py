@@ -18,28 +18,82 @@ def create_table():
 # Home Page
 @app.route("/")
 def home():
-    pass
+    return jsonify({"message":"welcome to home page of task manager api",
+    "routes":{
+     "GET /tasks":"Get all tasks",
+     "GET /tasks/<id>":"Get a specific task",
+     "POST /tasks":"Add a new task",
+     "PUT /tasks/<id>":"Update a task",
+     "DELETE /tasks/<id>":"Delete a task",
+     "GET /tasks/pending":"Get all pending tasks"   
+    }
+    })
 # Get all tasks
 @app.route("/tasks",methods=["GET"])
 def get_all_tasks():
-    pass
+    conn=get_db()
+    tasks=conn.execute("SELECT * FROM tasks").fetchall()
+    conn.close()
+    tasks_list=[{"id":task["id"], "title":task["title"],"status":task["status"]} for task in tasks]
+    return jsonify(tasks_list)
 # Get a specific task
 @app.route("/tasks/<int:id>",methods=["GET"])
 def get_task(id):
-    pass
+    conn=get_db()
+    task=conn.execute("SELECT * FROM tasks WHERE id=?",(id,)).fetchone()
+    conn.close()
+    if task is None:
+        return jsonify({"error":"task not found"}),404
+    return jsonify({"id":task["id"],"title":task["title"],"status":task["status"]}),200
 # Add a task
 @app.route("/tasks",methods=["POST"])
 def add_task():
-    pass
+    data=request.get_json()
+    if not data or "title" not in data:
+        return jsonify({"message":"title must be required"}),400
+    conn=get_db()
+    conn.execute("INSERT INTO tasks(title) VALUES(?)",(data["title"],))
+    conn.commit()
+    conn.close()
+    return jsonify({"message":"task added successfully"}),201
 # Update a task
 @app.route("/tasks/<int:id>",methods=["PUT"])
 def update_task(id):
-    pass
+    data=request.get_json()
+    if not data or "status" not in data:
+        return jsonify({"message":"status value required either completed or not"}),400
+    conn=get_db()
+    task=conn.execute("SELECT * FROM tasks WHERE id=?",(id,)).fetchone()
+    if task is None:
+        conn.close()
+        return jsonify({"error":"task not found"}),404
+    conn.execute("UPDATE tasks SET status=? WHERE id=?",(data["status"],id))
+    conn.commit()
+    conn.close()
+    return jsonify({"message":"task updated successfully"})
 # Delete a task
 @app.route("/tasks/<int:id>",methods=["DELETE"])
 def delete_task(id):
-    pass
+    conn=get_db()
+    task=conn.execute("SELECT * FROM tasks WHERE id=?",(id,)).fetchone()
+    if task is None:
+        conn.close()
+        return jsonify({"error":"task not found"}),404
+    conn.execute("DELETE FROM tasks WHERE id=?",(id,))
+    conn.commit()
+    conn.close()
+    return jsonify({"message":"task deleted successfully"})
+# Get all pending tasks
+@app.route("/tasks/pending",methods=["GET"])
+def get_all_pending_tasks():
+    conn=get_db()
+    tasks=conn.execute("SELECT * FROM tasks WHERE status='pending'").fetchall()
+    conn.close()
+    if len(tasks)==0:
+        return jsonify({"message":"no pending tasks are available, all tasks are completed"})
+    pending_tasks=[{"id":task["id"],"title":task["title"],"status":task["status"]} for task in tasks]
+    return jsonify(pending_tasks)
 # Entry point
 if __name__=="__main__":
     create_table()
-    # app.run(debug=True)
+    app.run(debug=True)
